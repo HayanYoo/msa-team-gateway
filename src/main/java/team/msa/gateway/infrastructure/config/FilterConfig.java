@@ -1,4 +1,4 @@
-package study.msa.msadesigntaskgateway.infrastructure.config;
+package team.msa.gateway.infrastructure.config;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cloud.gateway.route.RouteLocator;
