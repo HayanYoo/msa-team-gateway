@@ -75,3 +75,8 @@ msa:
       member: http://localhost:8081 # 회원 Domain path
       community: http://localhost:8082 # 게시판 Domain path
       lecture: http://localhost:8083 # 강의 Domain path
+
+
+jwt:
+  #BASE64 인코딩 : codestates-bithumb-msa-team-member-spring-boot-webflux-jwt-secret
+  secret: Y29kZXN0YXRlcy1iaXRodW1iLW1zYS10ZWFtLW1lbWJlci1zcHJpbmctYm9vdC13ZWJmbHV4LWp3dC1zZWNyZXQ=
