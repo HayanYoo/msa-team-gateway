@@ -14,7 +14,7 @@ public class jwtTest {
 
     @Test
     void successParseToken() {
-        String token = "eyJhbGciOiJIUzI1NiJ9.eyJJRCI6MSwiQVVUSCI6IkFETUlOIiwiZXhwIjoxNjUwOTczODYzfQ.rKG30lEnAKj7ss0vB5MrAg3Es-DFsq6Dg4NN32iAbWg";
+        String token = "eyJhbGciOiJIUzI1NiJ9.eyJtZW1iZXJJZCI6MSwibWVtYmVyVHlwZSI6IkFETUlOIiwiZXhwIjoxNjUxMDI0NDgzfQ.7xt0pAJ63uL8e_BDj84prjgtlItlDpT0JuPuMopUc5k";
         boolean parse = jwtProvider.validateToken(token);
 
         Assertions.assertTrue(parse);
@@ -27,5 +27,13 @@ public class jwtTest {
         IllegalArgumentException exception = Assertions.assertThrows(IllegalArgumentException.class, () -> jwtProvider.validateToken(token));
         Assertions.assertEquals("토큰값을 확인해 주세요", exception.getMessage());
 
+    }
+
+    @Test
+    void getMemberTypeFromTokenTest() {
+        String token = "eyJhbGciOiJIUzI1NiJ9.eyJtZW1iZXJJZCI6MSwibWVtYmVyVHlwZSI6IkFETUlOIiwiZXhwIjoxNjUxMDI0NDgzfQ.7xt0pAJ63uL8e_BDj84prjgtlItlDpT0JuPuMopUc5k";
+        String memberType = jwtProvider.getMemberTypeFromToken(token);
+
+        Assertions.assertEquals("ADMIN", memberType);
     }
 }

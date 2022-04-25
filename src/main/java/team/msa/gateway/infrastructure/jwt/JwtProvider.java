@@ -24,4 +24,15 @@ public class JwtProvider {
             throw new IllegalArgumentException("토큰값을 확인해 주세요");
         }
     }
+
+    public String getMemberTypeFromToken(String token) {
+        SecretKey key = Keys.hmacShaKeyFor(Decoders.BASE64.decode(secret));
+        try {
+            return Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token).getBody().get("memberType").toString();
+        } catch (Exception e) {
+            throw new IllegalArgumentException("토큰값을 확인해 주세요");
+        }
+    }
+
+
 }
