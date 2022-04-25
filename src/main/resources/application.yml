@@ -15,12 +15,19 @@ spring:
         response-timeout: 3s
 #      routes:  # YAML 설정 대신 Java code로 설정하기 --> FilterConfig.java
 #        - id: Member Domain Server
-#          uri: http://localhost:8082/
+#          uri: http://localhost:8081/
 #          predicates: # 조건절
 #            - Path=/member/**
 #          filters:
 #            - AddRequestHeader=member-request, member-request-header
 #            - AddResponseHeader=member-response, member-response-header
+#        - id: Community Domain Server
+#          uri: http://localhost:8082/
+#          predicates: # 조건절
+#            - Path=/community/**
+#          filters:
+#            - AddRequestHeader=community-request, community-request-header
+#            - AddResponseHeader=community-response, community-response-header
 #        - id: Lecture Domain Server
 #          uri: http://localhost:8083/
 #          predicates: # 조건절
@@ -28,13 +35,6 @@ spring:
 #          filters:
 #            - AddRequestHeader=lecture-request, lecture-request-header
 #            - AddResponseHeader=lecture-response, lecture-response-header
-#        - id: Community Domain Server
-#          uri: http://localhost:8084/
-#          predicates: # 조건절
-#            - Path=/community/**
-#          filters:
-#            - AddRequestHeader=community-request, community-request-header
-#            - AddResponseHeader=community-response, community-response-header
 
 eureka:
   client:
@@ -75,7 +75,6 @@ msa:
       member: http://localhost:8081 # 회원 Domain path
       community: http://localhost:8082 # 게시판 Domain path
       lecture: http://localhost:8083 # 강의 Domain path
-
 
 jwt:
   #BASE64 인코딩 : codestates-bithumb-msa-team-member-spring-boot-webflux-jwt-secret
