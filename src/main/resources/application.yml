@@ -13,28 +13,53 @@ spring:
       httpclient:
         connect-timeout: 3000
         response-timeout: 3s
-#      routes:  # YAML 설정 대신 Java code로 설정하기 --> FilterConfig.java
-#        - id: Member Domain Server
-#          uri: http://localhost:8081/
-#          predicates: # 조건절
-#            - Path=/member/**
-#          filters:
-#            - AddRequestHeader=member-request, member-request-header
-#            - AddResponseHeader=member-response, member-response-header
-#        - id: Community Domain Server
-#          uri: http://localhost:8082/
-#          predicates: # 조건절
-#            - Path=/community/**
-#          filters:
-#            - AddRequestHeader=community-request, community-request-header
-#            - AddResponseHeader=community-response, community-response-header
-#        - id: Lecture Domain Server
-#          uri: http://localhost:8083/
-#          predicates: # 조건절
-#            - Path=/lecture/**
-#          filters:
-#            - AddRequestHeader=lecture-request, lecture-request-header
-#            - AddResponseHeader=lecture-response, lecture-response-header
+      routes: # filter 설정- id: Member Domain Server
+        - id: Member Domain Server Welcome
+          uri: http://localhost:8081/
+          predicates: # 조건절
+            - Path=/member/login,/member/studentRegistration # 권한 검증을 진행하지 않는다.
+
+        - id: Member Domain Server for ADMIN
+          uri: http://localhost:8081/
+          predicates: # 조건절
+            - Path=/member/admin/**
+          filters:
+            - JwtAdminAuthVerifyFilter
+
+        - id: Member Domain Server for Member
+          uri: http://localhost:8081/
+          predicates: # 조건절
+            - Path=/member/**
+          filters:
+            - JwtAuthVerifyFilter
+
+        - id: Community Domain Server for ADMIN
+          uri: http://localhost:8082/
+          predicates: # 조건절
+            - Path=/community/admin/**
+          filters:
+            - JwtAdminAuthVerifyFilter
+
+        - id: Community Domain Server for Member
+          uri: http://localhost:8082/
+          predicates: # 조건절
+            - Path=/community/**
+          filters:
+            - JwtAuthVerifyFilter
+
+        - id: Lecture Domain Server for ADMIN
+          uri: http://localhost:8083/
+          predicates: # 조건절
+            - Path=/lecture/admin/**
+          filters:
+            - JwtAdminAuthVerifyFilter
+
+        - id: Lecture Domain Server for Member
+          uri: http://localhost:8083/
+          predicates: # 조건절
+            - Path=/lecture/**
+          filters:
+            - JwtAuthVerifyFilter
 
 eureka:
   client:
@@ -69,12 +94,9 @@ management:
     circuitbreakers:
       enabled: true # Actuator를 통해 Circuit Breaker 상태를 확인하기 위해 설정
 
-msa:
-  client:
-    url:
-      member: http://localhost:8081 # 회원 Domain path
-      community: http://localhost:8082 # 게시판 Domain path
-      lecture: http://localhost:8083 # 강의 Domain path
+logging:
+  level:
+    root: INFO
 
 jwt:
   #BASE64 인코딩 : codestates-bithumb-msa-team-member-spring-boot-webflux-jwt-secret
