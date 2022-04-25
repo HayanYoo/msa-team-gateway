@@ -17,11 +17,11 @@ public class FilterConfig {
     private String lectureUrl;
 
     @Bean
-    public RouteLocator gatewayRoutes(RouteLocatorBuilder builder) {
+    public RouteLocator gatewayRouter(RouteLocatorBuilder builder) {
 
         return builder.routes()
             .route(predicateSpec ->
-                predicateSpec.path("/member/**") // 회원 Domain Server 라우터 등록
+                predicateSpec.path("/member/admin/**") // 회원 Domain Server ADMIN 라우터 등록
                     .filters(gatewayFilterSpec ->
                         gatewayFilterSpec
                             .addRequestHeader("member-request", "member-request-header")
@@ -30,7 +30,11 @@ public class FilterConfig {
                     .uri(memberUrl)
             )
             .route(predicateSpec ->
-                predicateSpec.path("/community/**") // 게시판 Domain Server 라우터 등록
+                predicateSpec.path("/member/**") // 회원 Domain Server 라우터 등록
+                    .uri(memberUrl)
+            )
+            .route(predicateSpec ->
+                predicateSpec.path("/community/admin/**") // 게시판 Domain Server ADMIN 라우터 등록
                     .filters(gatewayFilterSpec ->
                         gatewayFilterSpec
                             .addRequestHeader("community-request", "community-request-header")
@@ -39,12 +43,20 @@ public class FilterConfig {
                     .uri(communityUrl)
             )
             .route(predicateSpec ->
-                predicateSpec.path("/lecture/**") // 강의 Domain Server 라우터 등록
+                predicateSpec.path("/community/**") // 게시판 Domain Server 라우터 등록
+                    .uri(communityUrl)
+            )
+            .route(predicateSpec ->
+                predicateSpec.path("/lecture/admin/**") // 강의 Domain Server ADMIN 라우터 등록
                     .filters(gatewayFilterSpec ->
                         gatewayFilterSpec
                             .addRequestHeader("lecture-request", "lecture-request-header")
                             .addResponseHeader("lecture-response", "lecture-response-header")
                     )
+                    .uri(lectureUrl)
+            )
+            .route(predicateSpec ->
+                predicateSpec.path("/lecture/**") // 강의 Domain Server 라우터 등록
                     .uri(lectureUrl)
             )
             .build();
