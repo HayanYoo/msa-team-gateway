@@ -22,12 +22,24 @@ public class GlobalErrorAttributes extends DefaultErrorAttributes {
             // 사용자 정의 에러일 경우, GlobalException을 통해 따로 처리된다.
             GlobalException ex = (GlobalException) getError(request);
             map.put("rt", ex.getStatus().value());
+            map.remove("status");
             map.put("rtMsg", ex.getReason());
-            return map;
+            map.remove("error");
         }
 
-        map.put("rt", HttpStatus.INTERNAL_SERVER_ERROR.value());
-        map.put("rtMsg", "서버에 문제가 생겼습니다. 관리자에게 문의 바랍니다.");
+        if (map.get("status") != null) { // status --> rt 로 치환
+            map.put("rt", map.get("status"));
+            map.remove("status");
+        }
+        if (map.get("error") != null) { // error --> rtMsg 로 치환
+            map.put("rtMsg", map.get("error"));
+            map.remove("error");
+        }
+
+        // 불필요 필드 제거
+        if (map.get("timestamp") != null) map.remove("timestamp");
+        if (map.get("requestId") != null) map.remove("requestId");
+
         return map;
     }
 }
