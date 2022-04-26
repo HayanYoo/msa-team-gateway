@@ -7,6 +7,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.server.reactive.ServerHttpRequest;
 import org.springframework.stereotype.Component;
 import reactor.core.publisher.Mono;
+import team.msa.gateway.infrastructure.exception.status.ExceptionMessage;
 import team.msa.gateway.infrastructure.exception.status.UnauthorizedException;
 import team.msa.gateway.infrastructure.jwt.JwtProvider;
 
@@ -33,7 +34,7 @@ public class JwtAdminAuthVerifyFilter extends AbstractGatewayFilterFactory<JwtAd
 
             // Request Header에 token이 존재하지 않을 경우
             if (!request.getHeaders().containsKey(HttpHeaders.AUTHORIZATION)) {
-                throw new UnauthorizedException("전달된 토큰이 없습니다.");
+                throw new UnauthorizedException(ExceptionMessage.AuthVerifyAccessDenied.getMessage());
             }
 
             // Request Header에서 token 추출
@@ -43,7 +44,7 @@ public class JwtAdminAuthVerifyFilter extends AbstractGatewayFilterFactory<JwtAd
             if (jwtProvider.validateToken(token) && jwtProvider.getMemberTypeFromToken(token).equals(MemberType.ADMIN.getName())) {
                 return chain.filter(exchange).then(Mono.fromRunnable(() -> log.info("===== 관리자 토큰 검증 완료 =====")));
             } else {
-                throw new UnauthorizedException("접근 권한이 없습니다.");
+                throw new UnauthorizedException(ExceptionMessage.AuthVerifyAccessDenied.getMessage());
             }
         });
     }
